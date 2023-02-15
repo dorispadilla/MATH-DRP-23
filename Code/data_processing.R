@@ -1,5 +1,7 @@
 #setwd("~/Documents/MATH-DRP-23/Data/Stocks")
-library(tidyverse)
+setwd("~/Downloads/GitHub/MATH-DRP-23/Data/Stocks")
+#library(tidyverse)
+install.packages("data.table")
 library(readr)
 
 
