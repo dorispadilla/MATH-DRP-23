@@ -9,10 +9,13 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(readr)
+library(data.table)
 ```
 
 An example with 2 stocks, index 1 and 100 merged
 ```{r}
+alexwd<-"/Users/alex/Documents/MATH-DRP-23/Data/Stocks"
+setwd(alexwd)
 file_list <- list.files(pattern="*.txt",full.names =TRUE, recursive=FALSE)
 n = 1
 df_1<-fread(file_list[n])
