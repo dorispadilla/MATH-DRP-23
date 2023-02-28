@@ -10,7 +10,7 @@ library(stringr)
 # create list of text files, length(file_list)= 7195
 file_list <- list.files (path=mypath, pattern="*.txt",full.names =TRUE, recursive=FALSE)
 # create an empty data frame 
-df_final = data.frame(matrix(nrow=0,ncol= 1))
+df_final = data.table(matrix(nrow=0,ncol= 1))
 colnames(df_final) = "Date"
 count = 0
 # loop
@@ -29,7 +29,7 @@ for (file in file_list)
   match_string <- '[\\w]+?(?=\\.us.txt)'
   name <-regmatches(file, regexec(match_string, file,perl=TRUE))
   c_name <- c("Date", name)
-  df_new <- data.frame(df$Date, df$Return_Percent)
+  df_new <- data.table(df$Date, df$Return_Percent)
   colnames(df_new) <- c_name
   df_final <- merge(df_new, df_final, by ="Date",all=TRUE)
   rm(df,df_new)
