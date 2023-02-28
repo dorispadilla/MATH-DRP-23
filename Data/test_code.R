@@ -1,29 +1,39 @@
-#setwd("~/Documents/MATH-DRP-23/Data/Stocks")
-mypath <- "~/Downloads/GitHub/MATH-DRP-23/Data/Stocks"
+mypath<- "~/Documents/MATH-DRP-23/Data/Stocks"
+#mypath <- "~/Downloads/GitHub/MATH-DRP-23/Data/Stocks"
 setwd(mypath)
 #library(tidyverse)
 #install.packages("data.table")
 library(readr)
 library(data.table)
+library(stringr)
 
 # create list of text files, length(file_list)= 7195
 file_list <- list.files (path=mypath, pattern="*.txt",full.names =TRUE, recursive=FALSE)
 # create an empty data frame 
 df_final = data.frame(matrix(nrow=0,ncol= 1))
 colnames(df_final) = "Date"
-
+count = 0
 # loop
 for (file in file_list)
 {
   df <- fread(file)
-    df$Return_Percent <- ((df$Close-df$Open)/df$Open)*100
-  str_match <- '\\w+'
-  name <-regmatches(file, regexec('\\w+', file))
+  if(length(df)==0){
+    match_string <- '[\\w]+?(?=\\.us.txt)'
+    name <-regmatches(file, regexec(match_string, file,perl=TRUE))
+    print(paste0("Excluding Item ", count,": ",name))
+    count = count+1
+    next()
+  }
+  df$Return_Percent <- ((df$Close-df$Open)/df$Open)*100
+  #match_string <- '^\\/(.+\\/)([\\w]+)'
+  match_string <- '[\\w]+?(?=\\.us.txt)'
+  name <-regmatches(file, regexec(match_string, file,perl=TRUE))
   c_name <- c("Date", name)
   df_new <- data.frame(df$Date, df$Return_Percent)
   colnames(df_new) <- c_name
-  df_final <- merge(df_new, df_final, by ="Date")
+  df_final <- merge(df_new, df_final, by ="Date",all=TRUE)
   rm(df,df_new)
+  count = count+1
 }
 
 
