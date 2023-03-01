@@ -10,7 +10,7 @@ library(stringr)
 # create list of text files, length(file_list)= 7195
 file_list <- list.files (path=mypath, pattern="*.txt",full.names =TRUE, recursive=FALSE)
 # create an empty data frame 
-df_final = data.frame(matrix(nrow=0,ncol= 1))
+df_final = data.table(matrix(nrow=0,ncol= 1))
 setnames(df_final,names(df_final),'Date')
 df_final$Date <- as.Date(df_final$Date)
 count = 0
@@ -31,7 +31,7 @@ for (file in file_list)
   name <-regmatches(file, regexec(match_string, file,perl=TRUE))
   #print(name)
   #c_name <- c("Date", name)
-  df_new <- data.frame(df$Date, df$Return_Percent)
+  df_new <- data.table(df$Date, df$Return_Percent)
   cols<-names(df_new)
   setnames(df_new,cols,c('Date',paste(name)))
   #colnames(df_new) <- c_name
