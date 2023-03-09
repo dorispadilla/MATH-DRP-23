@@ -1,5 +1,5 @@
-mypath<- "~/Documents/MATH-DRP-23/Data/Stocks"
-#mypath <- "~/Downloads/GitHub/MATH-DRP-23/Data/Stocks"
+#mypath<- "~/Documents/MATH-DRP-23/Data/Stocks"
+mypath <- "~/Downloads/GitHub/MATH-DRP-23/Data/Stocks"
 setwd(mypath)
 #library(tidyverse)
 #install.packages("data.table")
@@ -18,6 +18,10 @@ count = 0
 for (file in file_list)
 {
   df <- fread(file)
+# use date to get value between 2010 and 12/31/2015
+  date <- as.Date(df$Date,format = "%Y-%m-%d")
+  df<- df[format(date,format = "%Y") >= 2010 & (format(date,format= "%Y")) <= 2015]
+  
   if(length(df)==0){
     match_string <- '[\\w]+?(?=\\.us.txt)'
     name <-regmatches(file, regexec(match_string, file,perl=TRUE))
@@ -25,6 +29,7 @@ for (file in file_list)
     count = count+1
     next()
   }
+  
   df$Return_Percent <- ((df$Close-df$Open)/df$Open)*100
   #match_string <- '^\\/(.+\\/)([\\w]+)'
   match_string <- '[\\w\\-\\_]+?(?=\\.us.txt)'
@@ -44,16 +49,3 @@ for (file in file_list)
 }
 
 
-
-
-
-
-##########################################
-# Read all the files in
-## all_file_df <- lapply(all_file_list, function(x) {fread(x)})
-# Change the lists into data frames
-## all_file_asdf <- lapply (all_file_df, function(x) {as.data.frame(x)})
-# combine all the txt files into 1 data frame
-## combined_df <- do.call("rbind", lapply(all_file_df, as.data.frame))
-# write into 1 txt
-## write.table(combined_df, "~/Downloads/GitHub/MATH-DRP-23/Data/combData.txt")
